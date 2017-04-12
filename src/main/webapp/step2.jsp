@@ -37,7 +37,7 @@
     <input type="submit" value="&lt; Continue"/>
   </form:form>
 
-  <form:form action="prepareStep1" commandName="trainingCourseForm" style="display: inline">
+  <form:form action="showStep1" commandName="trainingCourseForm" style="display: inline">
     <input type="submit" value="Back &gt;"/>
   </form:form>
 </body>

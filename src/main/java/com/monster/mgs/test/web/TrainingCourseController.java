@@ -37,11 +37,11 @@ public class TrainingCourseController {
 
     @RequestMapping(value="/clearStep1")
     public ModelAndView clearStep1() {
-        return prepareStep1(new TrainingCourseForm());
+        return showStep1(new TrainingCourseForm());
     }
 
-    @RequestMapping(value = "/prepareStep1")
-    public ModelAndView prepareStep1(@ModelAttribute("trainingCourseForm") TrainingCourseForm trainingCourseForm) {
+    @RequestMapping(value = "/showStep1")
+    public ModelAndView showStep1(@ModelAttribute("trainingCourseForm") TrainingCourseForm trainingCourseForm) {
         return getModelForStep1(trainingCourseForm);
     }
 
@@ -80,7 +80,7 @@ public class TrainingCourseController {
 
     private ModelAndView getModelForStep1(@ModelAttribute("trainingCourseForm") TrainingCourseForm trainingCourseForm) {
         ModelAndView model = new ModelAndView("step1", "trainingCourseForm", trainingCourseForm);
-        model.addObject("listOfTrainingCourses", service.getAllCourses());
+        model.addObject("listOfTrainingCourses", service.getCourses());
         return model;
     }
     
