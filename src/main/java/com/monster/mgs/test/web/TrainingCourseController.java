@@ -17,6 +17,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 @Controller
 @SessionAttributes("trainingCourseForm")
 public class TrainingCourseController {
@@ -30,17 +33,17 @@ public class TrainingCourseController {
     @Autowired
     private TrainingCourseService service;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = GET)
     public String welcome() {
         return "index";
     }
 
     @RequestMapping(value="/clearStep1")
     public ModelAndView clearStep1() {
-        return showStep1(new TrainingCourseForm());
+        return getModelForStep1(new TrainingCourseForm());
     }
 
-    @RequestMapping(value = "/showStep1")
+    @RequestMapping(value = "/showStep1", method = POST)
     public ModelAndView showStep1(@ModelAttribute("trainingCourseForm") TrainingCourseForm trainingCourseForm) {
         return getModelForStep1(trainingCourseForm);
     }
@@ -55,7 +58,7 @@ public class TrainingCourseController {
         return getModelForStep2(trainingCourseForm);
     }
 
-    @RequestMapping(value = "/processStep2")
+    @RequestMapping(value = "/processStep2", method = POST)
     public ModelAndView processStep2(@ModelAttribute("trainingCourseForm") TrainingCourseForm trainingCourseForm,
                               BindingResult bindingResult) {
         step2Validator.validate(trainingCourseForm, bindingResult);
@@ -65,7 +68,7 @@ public class TrainingCourseController {
         return new ModelAndView("step3", "trainingCourseForm", trainingCourseForm);
     }
 
-    @RequestMapping(value = "/processStep3")
+    @RequestMapping(value = "/processStep3", method = POST)
     public ModelAndView showTable(@ModelAttribute("trainingCourseForm") TrainingCourseForm trainingCourseForm) {
         service.saveOrUpdateTrainingCourse(trainingCourseForm);
         List<TrainingCourseFeedback> feedbacks = service.getFeedbacks();
