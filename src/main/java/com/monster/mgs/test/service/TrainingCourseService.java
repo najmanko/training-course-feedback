@@ -33,4 +33,13 @@ public class TrainingCourseService {
     public List<TrainingCourseSection> getSections(TrainingCourse trainingCourse) {
         return dao.getSections(trainingCourse);
     }
+
+    public TrainingCourseSection findSection(long id) {
+        return dao.findSection(id);
+    }
+
+    public TrainingCourse findCourse(long id) {
+        return dao.findCourse(id);
+    }
+
 }

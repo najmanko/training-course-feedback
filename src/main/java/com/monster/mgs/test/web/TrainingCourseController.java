@@ -46,7 +46,7 @@ public class TrainingCourseController {
     }
 
     @RequestMapping(value = "/processStep1")
-    public ModelAndView step2(@ModelAttribute("trainingCourseForm") TrainingCourseForm trainingCourseForm,
+    public ModelAndView processStep1(@ModelAttribute("trainingCourseForm") TrainingCourseForm trainingCourseForm,
                               BindingResult bindingResult) {
         step1Validator.validate(trainingCourseForm, bindingResult);
         if (bindingResult.hasErrors()) {
