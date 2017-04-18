@@ -12,11 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
+import static java.lang.String.format;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -70,9 +74,11 @@ public class TrainingCourseController {
 
     @RequestMapping(value = "/processStep3", method = POST)
     public ModelAndView showTable(@ModelAttribute("trainingCourseForm") TrainingCourseForm trainingCourseForm) {
-        service.saveOrUpdateTrainingCourse(trainingCourseForm);
+        Long feedbackId = service.saveOrUpdateTrainingCourse(trainingCourseForm);
         List<TrainingCourseFeedback> feedbacks = service.getFeedbacks();
-        return new ModelAndView("feedbacks", "feedbacks", feedbacks);
+        ModelAndView model = new ModelAndView("feedbacks", "feedbacks", feedbacks);
+        model.addObject("statusMessage", getSavedStatusMessage(feedbackId));
+        return model;
     }
 
     @InitBinder
@@ -92,5 +98,12 @@ public class TrainingCourseController {
         List<TrainingCourseSection> sections = service.getSections(trainingCourseForm.getTrainingCourse());
         model.addObject("sections", sections);
         return model;
+    }
+    
+    private String getSavedStatusMessage(Long feedbackId) {
+        if (feedbackId != null) {
+            return format("Feedback with id: %s saved successfully.", feedbackId);
+        } 
+        return "Feedback was not saved!";
     }
 }

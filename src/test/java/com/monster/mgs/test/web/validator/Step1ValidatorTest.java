@@ -7,17 +7,22 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import static com.monster.mgs.test.util.DataGenerator.generateTrainingCourseForm;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.springframework.validation.ValidationUtils.invokeValidator;
 
 @RunWith(MockitoJUnitRunner.class)
 public class Step1ValidatorTest {
-    
+
     private static final String EMPTY = " ";
+    private static final String STRING_WITH_51_CHARS = "123456789012345678921234567893123456789412345678951";
+    private static final String STRING_WITH_200_CHARS = "12345678901234567892123456789312345678941234567895" +
+            "12345678961234567897123456789812345678991234567890" +
+            "12345678901234567892123456789312345678941234567895" +
+            "123456789612345678971234567898123456789912345678901";
 
     private Validator validator = new Step1Validator();
     private TrainingCourseForm form;
@@ -32,7 +37,7 @@ public class Step1ValidatorTest {
     @Test
     public void formIsValid() {
         //when
-        ValidationUtils.invokeValidator(validator, form, errors);
+        invokeValidator(validator, form, errors);
 
         //then
         assertNull(errors.getFieldError("firstName"));
@@ -52,7 +57,7 @@ public class Step1ValidatorTest {
         form.setTrainingCourseDate(null);
 
         //when
-        ValidationUtils.invokeValidator(validator, form, errors);
+        invokeValidator(validator, form, errors);
 
         //then
         assertEquals(errors.getFieldError("firstName").getRejectedValue(), null);
@@ -64,18 +69,27 @@ public class Step1ValidatorTest {
 
     @Test
     public void formIsInvalidBecauseOfEmptyFields() {
+        formValuesValidation(EMPTY, EMPTY);
+    }
+
+    @Test
+    public void formIsInvalidBecauseOfTooLongFields() {
+        formValuesValidation(STRING_WITH_51_CHARS, STRING_WITH_200_CHARS);
+    }
+    
+    private void formValuesValidation(String namesValue, String emailValue) {
         //given
-        form.setFirstName(EMPTY);
-        form.setLastName(EMPTY);
-        form.setEmailAddress(EMPTY);
+        form.setFirstName(namesValue);
+        form.setLastName(namesValue);
+        form.setEmailAddress(emailValue);
 
         //when
-        ValidationUtils.invokeValidator(validator, form, errors);
+        invokeValidator(validator, form, errors);
 
         //then
-        assertEquals(errors.getFieldError("firstName").getRejectedValue(), EMPTY);
-        assertEquals(errors.getFieldError("lastName").getRejectedValue(), EMPTY);
-        assertEquals(errors.getFieldError("emailAddress").getRejectedValue(), EMPTY);
+        assertEquals(errors.getFieldError("firstName").getRejectedValue(), namesValue);
+        assertEquals(errors.getFieldError("lastName").getRejectedValue(), namesValue);
+        assertEquals(errors.getFieldError("emailAddress").getRejectedValue(), emailValue);
     }
 
     @Test
@@ -84,7 +98,7 @@ public class Step1ValidatorTest {
         form.setEmailAddress("invalidMail");
 
         //when
-        ValidationUtils.invokeValidator(validator, form, errors);
+        invokeValidator(validator, form, errors);
 
         //then
         assertEquals(errors.getFieldError("emailAddress").getRejectedValue(), "invalidMail");

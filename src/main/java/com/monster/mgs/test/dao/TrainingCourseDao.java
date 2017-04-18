@@ -46,7 +46,7 @@ public class TrainingCourseDao {
     }
 
     @Transactional
-    public void saveOrUpdateTrainingCourse(TrainingCourseForm trainingCourseForm) {
+    public Long saveOrUpdateTrainingCourse(TrainingCourseForm trainingCourseForm) {
         TrainingCourseFeedback oldFeedback = loadExistingTrainingCourseFeedback(trainingCourseForm.getEmailAddress());
 
         Visitor visitor = oldFeedback != null ? oldFeedback.getVisitor() : new Visitor();
@@ -62,7 +62,7 @@ public class TrainingCourseDao {
         feedback.setRating(trainingCourseForm.getRate());
         feedback.setComment(trainingCourseForm.getComment());
 
-        getSession().save(feedback);
+        return (Long)getSession().save(feedback);
     }
 
     private Session getSession() {

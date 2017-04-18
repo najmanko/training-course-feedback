@@ -7,7 +7,7 @@
   <h1>Training Course Feedback Form</h1>
   <p>Please help us to improve our class by completing this form.</p>
 
-  <form:form action="processStep1" commandName="trainingCourseForm" style="display: inline" class="form-signin">
+  <form:form action="processStep1" commandName="trainingCourseForm" style="display: inline">
     <dl>
       <dt>First Name:</dt>
       <dd><form:input type="text" path="firstName"/></dd>

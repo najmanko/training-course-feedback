@@ -7,9 +7,12 @@
     <title>Spring 3 MVC Multipe Row Submit - viralpatel.net</title>
 </head>
 <body>
+<p>${statusMessage}</p>
+<br/>
 <h2>Show Contacts</h2>
 <table width="50%">
     <tr>
+        <th>id</th>
         <th>Name</th>
         <th>Lastname</th>
         <th>Email</th>
@@ -21,6 +24,7 @@
     </tr>
     <c:forEach items="${feedbacks}" var="feedback" varStatus="status">
         <tr>
+            <td>${feedback.id}</td>
             <td>${feedback.visitor.firstName}</td>
             <td>${feedback.visitor.lastName}</td>
             <td>${feedback.visitor.emailAddress}</td>

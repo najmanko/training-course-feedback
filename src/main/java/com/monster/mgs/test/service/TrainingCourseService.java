@@ -26,8 +26,8 @@ public class TrainingCourseService {
         return dao.getCourses();
     }
 
-    public void saveOrUpdateTrainingCourse(TrainingCourseForm trainingCourseForm) {
-        dao.saveOrUpdateTrainingCourse(trainingCourseForm);
+    public Long saveOrUpdateTrainingCourse(TrainingCourseForm trainingCourseForm) {
+        return dao.saveOrUpdateTrainingCourse(trainingCourseForm);
     }
 
     public List<TrainingCourseSection> getSections(TrainingCourse trainingCourse) {

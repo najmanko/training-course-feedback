@@ -4,6 +4,7 @@ import com.monster.mgs.test.model.TrainingCourseFeedback;
 import com.monster.mgs.test.web.TrainingCourseForm;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -17,6 +18,7 @@ import static com.monster.mgs.test.util.DataGenerator.generateTrainingCourseForm
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Answers.RETURNS_DEEP_STUBS;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -32,6 +34,11 @@ public class TrainingCourseDaoTest {
 
     @Captor
     private ArgumentCaptor<TrainingCourseFeedback> feedbackArgumentCaptor;
+    
+    @Before
+    public void setup() {
+        given(sessionFactory.getCurrentSession().save(any(TrainingCourseFeedback.class))).willReturn(1L);
+    }
 
     @Test
     public void saveNewTrainingCourseFeedback() {

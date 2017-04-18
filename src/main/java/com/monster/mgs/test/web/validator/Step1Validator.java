@@ -17,6 +17,8 @@ import static org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhit
 public class Step1Validator implements Validator {
 
     private static final String EMAIL_PATTERN = "^[\\w\\-]([\\.\\w])+[\\w]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+    private static final int EMAIL_MAX_LENGTH = 200;
+    private static final int NAME_MAX_LENGTH = 50;
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -25,19 +27,40 @@ public class Step1Validator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        TrainingCourseForm trainingCourseForm = (TrainingCourseForm) o;
+        TrainingCourseForm form = (TrainingCourseForm) o;
 
+        validateName(form, errors);
+        validateEmail(form.getEmailAddress(), errors);
+        
+        rejectIfEmptyOrWhitespace(errors, "trainingCourse", "NotEmpty");
+        rejectIfEmptyOrWhitespace(errors, "trainingCourseDate", "NotEmpty");
+    }
+    
+    private void validateName(TrainingCourseForm form, Errors errors) {
         rejectIfEmptyOrWhitespace(errors, "firstName", "NotEmpty");
+        if (!StringUtils.isEmpty(errors.getFieldValue("firstName"))) {
+            if (form.getFirstName().length() > NAME_MAX_LENGTH) {
+                errors.rejectValue("firstName", "name.too.long");
+            }
+        }
         rejectIfEmptyOrWhitespace(errors, "lastName", "NotEmpty");
+        if (!StringUtils.isEmpty(errors.getFieldValue("lastName"))) {
+            if (form.getFirstName().length() > NAME_MAX_LENGTH) {
+                errors.rejectValue("lastName", "name.too.long");
+            }
+        }
+    }
+    
+    private void validateEmail(String email, Errors errors) {
         rejectIfEmptyOrWhitespace(errors, "emailAddress", "NotEmpty");
         if (!StringUtils.isEmpty(errors.getFieldValue("emailAddress"))) {
-
-            if (!isEmailAddressValid(trainingCourseForm.getEmailAddress())) {
+            if (email.length() > EMAIL_MAX_LENGTH) {
+                errors.rejectValue("emailAddress", "email.too.long");
+            }
+            if (!isEmailAddressValid(email)) {
                 errors.rejectValue("emailAddress", "email.incorrect.format");
             }
         }
-        rejectIfEmptyOrWhitespace(errors, "trainingCourse", "NotEmpty");
-        rejectIfEmptyOrWhitespace(errors, "trainingCourseDate", "NotEmpty");
     }
 
     private boolean isEmailAddressValid(String emailAddress) {
